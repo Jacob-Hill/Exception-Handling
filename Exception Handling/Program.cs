@@ -20,8 +20,9 @@ namespace Exception_Handling
             }
             else
             {
-                Console.WriteLine("")
+                Console.WriteLine(Math.Sqrt(i));
             }
+            Console.WriteLine("Good Bye");
         }
 
 
