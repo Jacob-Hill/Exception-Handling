@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 
 namespace Exception_Handling
 {
@@ -8,6 +9,7 @@ namespace Exception_Handling
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(ReadTxtFile("a.txt"));
             Console.Read();
         }
 
@@ -40,13 +42,13 @@ namespace Exception_Handling
                 }
                 Console.WriteLine("Number is within range");
             }
-            catch (InvalidCastException)
+            catch (InvalidCastException e)
             {
-                Console.WriteLine("Invalid Format");
+                Console.WriteLine(e.Message);
             }
-            catch (ConstraintException)
+            catch (ConstraintException e)
             {
-                Console.WriteLine("Number out of Range");
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -75,14 +77,52 @@ namespace Exception_Handling
                 }
                 Console.WriteLine("List passes conditions");
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
-                Console.WriteLine("List contains incorrect amount of ints");
+                Console.WriteLine(e.Message);
             }
-            catch (ConstraintException)
+            catch (ConstraintException e)
             {
-                Console.WriteLine("Numbers do not fit specifications");
+                Console.WriteLine(e.Message);
             }
         }
+
+        static string ReadTxtFile(string fileName)
+        {
+            string result = "";
+            try
+            {
+                if (fileName.Length < 4)
+                {
+                    throw new InvalidOperationException("Filename is too short to be a complete filename");
+                }
+                if(fileName[fileName.Length - 4] != '.' || fileName[fileName.Length - 3] != 't' || fileName[fileName.Length - 2] != 'x' || fileName[fileName.Length - 1] != 't')
+                {
+                    throw new InvalidOperationException("File is not a .txt file");
+                }
+                if (!File.Exists(fileName))
+                {
+                    throw new InvalidOperationException("File does not exist in current directory");
+                }
+                StreamReader fileStr = File.OpenText(fileName);
+                string nextLine;
+                do
+                {
+                    nextLine = fileStr.ReadLine();
+                    if(nextLine != "" && nextLine != "\n" && nextLine != null)
+                    {
+                        result += nextLine + "\n";
+                    }
+                } while (nextLine != "" && nextLine != "\n" && nextLine != null);
+
+            }
+            catch(InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return result;
+        }
+
+
     }
 }
